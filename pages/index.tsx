@@ -1,21 +1,41 @@
-import * as React from "react";
+import Head from 'next/head';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import ProductCard from '../../components/ProductCard'; // Assuming you have a ProductCard component
+import { fetchProducts } from '../../utils/productUtils'; // Assuming you have a fetchProducts utility function
 
-const LandingPage: React.FC = () => {
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  // Add other product properties as needed
+}
+
+const ProductsPage: React.FC = () => {
+  const products: Product[] = fetchProducts();
+
   return (
     <div>
-      <h1>Welcome to Handcrafted Haven</h1>
-      <p>
-        Handcrafted Haven is an innovative web application that aims to provide
-        a platform for artisans and crafters to showcase and sell their unique
-        handcrafted items.
-      </p>
-      <p>
-        It serves as a virtual marketplace, connecting talented creators with
-        potential customers who appreciate the beauty and quality of handmade
-        products.
-      </p>
+      <Head>
+        <title>Products</title>
+        <meta name="description" content="List of products" />
+      </Head>
+
+      <Header />
+
+      <main>
+        <h1>Products</h1>
+        <div>
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };
 
-export default LandingPage;
+export default ProductsPage;
