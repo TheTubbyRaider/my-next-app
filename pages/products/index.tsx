@@ -1,19 +1,24 @@
+import React from 'react'
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import ProductCard from '../../components/ProductCard';
 import { fetchProducts } from '../../utils/fetchData';
+
+const ProductCard = dynamic(() => import('../../components/ProductCard'), {
+  loading: () => <div>Loading...</div>,
+});
 
 interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
+  imageUrl: string;
 }
 
-const ProductsPage: React.FC = () => {
-  const products: Product[] = fetchProducts();
-
+const ProductsPage: React.FC<{ products: Product[] }> = ({ products }) => {
   return (
     <div>
       <Head>
@@ -35,6 +40,16 @@ const ProductsPage: React.FC = () => {
       <Footer />
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const products = await fetchProducts();
+
+  return {
+    props: {
+      products,
+    },
+  };
 };
 
 export default ProductsPage;

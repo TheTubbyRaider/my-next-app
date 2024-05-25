@@ -1,36 +1,43 @@
-import Head from 'next/head';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import ProductCard from '../../components/ProductCard'; // Assuming you have a ProductCard component
-import { fetchProducts } from '../../utils/productUtils'; // Assuming you have a fetchProducts utility function
+import React from "react";
+import Head from "next/head";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import ProductCard from "../components/ProductCard";
+import { fetchProducts } from "../utils/fetchData";
 
 interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  // Add other product properties as needed
+  imageUrl: string;
 }
 
-const ProductsPage: React.FC = () => {
-  const products: Product[] = fetchProducts();
+const HomePage: React.FC = () => {
+  const products: Product[] = fetchProducts().map((product) => ({
+    ...product,
+    imageUrl: "https://via.placeholder.com/150",
+  }));
 
   return (
     <div>
       <Head>
-        <title>Products</title>
-        <meta name="description" content="List of products" />
+        <title>Home</title>
+        <meta name="description" content="Welcome to our e-commerce website" />
       </Head>
 
       <Header />
 
       <main>
-        <h1>Products</h1>
-        <div>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <h1>Welcome to our website</h1>
+        <section>
+          <h2>Featured Products</h2>
+          <div role="list">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
       </main>
 
       <Footer />
@@ -38,4 +45,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default HomePage;

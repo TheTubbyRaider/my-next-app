@@ -1,21 +1,23 @@
+import React from 'react'
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { fetchProduct } from '../../utils/fetchData';
 
 interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
+  imageUrl: string;
 }
 
-const ProductDetailPage: React.FC = () => {
+const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
   const router = useRouter();
-  const { id } = router.query;
-  const product: Product | undefined = id ? fetchProduct(id as string) : undefined;
 
-  if (!product) {
+  if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
@@ -30,6 +32,7 @@ const ProductDetailPage: React.FC = () => {
 
       <main>
         <h1>{product.name}</h1>
+        <img src={`/images/${product.imageUrl}`} alt={product.name} />
         <p>{product.description}</p>
         <p>Price: ${product.price}</p>
       </main>
@@ -39,7 +42,15 @@ const ProductDetailPage: React.FC = () => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
+  const product = await fetchProduct(id as string);
+
+  return {
+    props: {
+      product,
+    },
+  };
+};
+
 export default ProductDetailPage;
-
-
-
