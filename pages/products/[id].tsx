@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import { GetServerSideProps } from 'next';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { fetchProduct } from '../../utils/fetchData';
+import ProductReview from '../../components/ProductReview';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { fetchProduct } from '../../utils/fetchData';
+import Head from 'next/head';
 
 interface Product {
   id: string;
@@ -13,6 +13,8 @@ interface Product {
   price: number;
   imageUrl: string;
 }
+
+import { useRouter } from "next/router";
 
 const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
   const router = useRouter();
@@ -35,6 +37,7 @@ const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
         <img src={`/images/${product.imageUrl}`} alt={product.name} />
         <p>{product.description}</p>
         <p>Price: ${product.price}</p>
+        <ProductReview productId={product.id} />
       </main>
 
       <Footer />
