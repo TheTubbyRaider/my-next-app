@@ -5,6 +5,9 @@ import ProductReview from '../../components/ProductReview';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface Product {
   id: string;
@@ -14,13 +17,15 @@ interface Product {
   imageUrl: string;
 }
 
-import { useRouter } from "next/router";
-
 const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
   const router = useRouter();
 
   if (router.isFallback) {
     return <div>Loading...</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found</div>;
   }
 
   return (
@@ -33,8 +38,25 @@ const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
       <Header />
 
       <main>
+        <nav aria-label="Breadcrumb">
+          <Link href="/">
+            <a>Home</a>
+          </Link>
+          <span>&gt;</span>
+          <Link href="/products">
+            <a>Products</a>
+          </Link>
+          <span>&gt;</span>
+          <span>{product.name}</span>
+        </nav>
+
         <h1>{product.name}</h1>
-        <img src={`/images/${product.imageUrl}`} alt={product.name} />
+        <Image
+          src={`/images/${product.imageUrl}`}
+          alt={product.name}
+          width={500}
+          height={300}
+        />
         <p>{product.description}</p>
         <p>Price: ${product.price}</p>
         <ProductReview productId={product.id} />
@@ -47,13 +69,20 @@ const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const product = await fetchProduct(id as string);
 
-  return {
-    props: {
-      product,
-    },
-  };
+  try {
+    const product = await fetchProduct(id as string);
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (error) {
+    // Handle error case
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default ProductDetailPage;
