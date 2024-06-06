@@ -1,38 +1,25 @@
-import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-const Header: React.FC = () => {
-  const router = useRouter();
+interface HeaderProps {
+  className?: string;
+}
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      router.push(href);
-    }
-  };
-
+const Header: React.FC<HeaderProps> = ({ className }) => {
   return (
-    <header>
-      <nav role="navigation" aria-label="Main Navigation">
-        <Link href="/" className={router.pathname === '/' ? 'active' : ''}>
-          <a tabIndex={0} onKeyDown={(e) => handleKeyDown(e, '/')}>
-            Home
-          </a>
-        </Link>
-        <Link href="/about" className={router.pathname === '/about' ? 'active' : ''}>
-          <a tabIndex={0} onKeyDown={(e) => handleKeyDown(e, '/about')}>
-            About
-          </a>
-        </Link>
-        <Link href="/products" className={router.pathname === '/products' ? 'active' : ''}>
-          <a tabIndex={0} onKeyDown={(e) => handleKeyDown(e, '/products')}>
-            Products
-          </a>
-        </Link>
+    <header className={className}>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/about">
+              <a>About</a>
+            </Link>
+          </li>
+        </ul>
       </nav>
     </header>
   );
