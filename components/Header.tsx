@@ -5,7 +5,10 @@ import { useRouter } from 'next/router';
 const Header: React.FC = () => {
   const router = useRouter();
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>, href: string) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       router.push(href);

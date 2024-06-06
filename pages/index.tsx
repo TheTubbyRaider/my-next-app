@@ -1,9 +1,9 @@
-import React from "react";
-import Head from "next/head";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ProductCard from "../components/ProductCard";
-import { fetchProducts } from "../utils/fetchData";
+import React from 'react';
+import Head from 'next/head';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import ProductCard from '../components/ProductCard';
+import { fetchProducts } from '../utils/fetchData';
 
 interface Product {
   id: string;
@@ -14,10 +14,36 @@ interface Product {
 }
 
 const HomePage: React.FC = () => {
-  const products: Product[] = fetchProducts().map((product) => ({
-    ...product,
-    imageUrl: "https://via.placeholder.com/150",
-  }));
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedProducts = await fetchProducts();
+        const productsWithImages = fetchedProducts.map((product) => ({
+          ...product,
+          imageUrl: 'https://via.placeholder.com/150',
+        }));
+        setProducts(productsWithImages);
+      } catch (err) {
+        setError('Failed to fetch products');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>

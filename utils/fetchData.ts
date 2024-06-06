@@ -1,23 +1,47 @@
-// Dummy data for demonstration purposes
-const products = [
-  { id: '1', name: 'Product 1', description: 'This is product 1', price: 9.99, imageUrl: 'https://via.placeholder.com/150', category: 'Pottery' },
-  { id: '2', name: 'Product 2', description: 'This is product 2', price: 14.99, imageUrl: 'https://via.placeholder.com/150', category: 'Jewelry' },
-  { id: '3', name: 'Product 3', description: 'This is product 3', price: 19.99, imageUrl: 'https://via.placeholder.com/150', category: 'Pottery' },
-];
+// Dummy implementation for demonstration purposes
+// Replace with your actual data fetching logic
 
-const artisans = [
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+}
+
+const dummyProducts: Product[] = [
   {
     id: '1',
-    name: 'Jane Smith',
-    bio: 'I am a potter with a passion for creating unique and functional ceramics.',
-    imageUrl: 'https://via.placeholder.com/200',
-    products: [products[0], products[1]],
+    name: 'Product 1',
+    description: 'This is the description for Product 1',
+    price: 9.99,
+    imageUrl: 'product1.jpg',
   },
-  // Add more artisans as needed
+  {
+    id: '2',
+    name: 'Product 2',
+    description: 'This is the description for Product 2',
+    price: 14.99,
+    imageUrl: 'product2.jpg',
+  },
+  // Add more dummy products as needed
 ];
 
-export const fetchProducts = () => products;
+export const fetchProducts = async (): Promise<Product[]> => {
+  // Simulate an asynchronous operation
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(dummyProducts);
+    }, 1000);
+  });
+};
 
-export const fetchProduct = (id: string) => products.find((product) => product.id === id) || null;
-
-export const fetchArtisan = (id: string) => artisans.find((artisan) => artisan.id === id) || null;
+export const fetchProduct = async (id: string): Promise<Product | null> => {
+  // Simulate an asynchronous operation
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const product = dummyProducts.find((p) => p.id === id);
+      resolve(product || null);
+    }, 1000);
+  });
+};

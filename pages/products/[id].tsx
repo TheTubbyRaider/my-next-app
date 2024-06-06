@@ -67,7 +67,9 @@ const ProductDetailPage: React.FC<{ product: Product }> = ({ product }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{ product: Product }> = async (
+  context
+) => {
   const { id } = context.query;
 
   try {

@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {isExpanded ? 'Hide Details' : 'Show Details'}
       </button>
       <div id="product-details" aria-hidden={!isExpanded}>
-        {/* Product details */}
+        {/* Add your product details content here */}
       </div>
     </div>
   );

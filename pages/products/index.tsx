@@ -1,14 +1,10 @@
-import React from 'react'
-import { GetStaticProps } from 'next';
+import React from 'react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import ProductCard from '../../components/ProductCard';
 import { fetchProducts } from '../../utils/fetchData';
-
-const ProductCard = dynamic(() => import('../../components/ProductCard'), {
-  loading: () => <div>Loading...</div>,
-});
+import { GetStaticProps } from 'next';
 
 interface Product {
   id: string;
@@ -18,7 +14,11 @@ interface Product {
   imageUrl: string;
 }
 
-const ProductsPage: React.FC<{ products: Product[] }> = ({ products }) => {
+interface ProductsPageProps {
+  products: Product[];
+}
+
+const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
   return (
     <div>
       <Head>
@@ -42,13 +42,14 @@ const ProductsPage: React.FC<{ products: Product[] }> = ({ products }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<ProductsPageProps> = async () => {
   const products = await fetchProducts();
 
   return {
     props: {
       products,
     },
+    revalidate: 60, // Revalidate the page every 60 seconds
   };
 };
 
