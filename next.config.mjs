@@ -1,16 +1,15 @@
-import withBundleAnalyzer from '@next/bundle-analyzer';
+import { defineConfig } from 'next/config';
+import withPlugins from 'next-compose-plugins';
+import withImages from 'next-images';
 
-const bundleAnalyzerConfig = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+const nextConfig = defineConfig({
+  // your config options here
+  images: {
+    domains: ['example.com'],
+  },
 });
 
-const nextConfig = {
-  ...bundleAnalyzerConfig,
-  compress: true,
-  webpack: (config, { isServer }) => {
-    // Additional webpack configuration
-    return config;
-  },
-};
-
-export default nextConfig;
+module.exports = withPlugins(nextConfig, [
+  withImages,
+  // add other plugins here
+]);
